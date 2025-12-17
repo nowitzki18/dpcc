@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge"
 import { Star } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { BookCover } from "@/components/BookCover"
 
 interface BookCardProps {
   book: Book
@@ -20,9 +21,7 @@ export function BookCard({ book, authorName, showExplainability, recommendationS
     <Link href={`/book/${book.id}`}>
       <Card className={cn("hover:shadow-lg transition-shadow cursor-pointer h-full", className)}>
         <CardHeader>
-          <div className="aspect-[2/3] bg-muted rounded-lg mb-4 flex items-center justify-center">
-            <span className="text-muted-foreground text-sm">📚</span>
-          </div>
+          <BookCover book={book} size="md" className="mb-4" />
           <CardTitle className="line-clamp-2">{book.title}</CardTitle>
           <CardDescription>{authorName || "Unknown Author"}</CardDescription>
         </CardHeader>

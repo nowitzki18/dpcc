@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Star, BookOpen, Clock, Share2, Flag } from "lucide-react"
 import { ExplainabilityBadge } from "@/components/ExplainabilityBadge"
 import { TrustPill } from "@/components/TrustPill"
+import { BookCover } from "@/components/BookCover"
 import { generateRecommendations } from "@/lib/recommendations"
 import { estimateReadingTimeMinutes } from "@/lib/utils"
 import Link from "next/link"
@@ -97,9 +98,7 @@ export default function BookDetailPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="grid md:grid-cols-3 gap-8 mb-8">
         <div className="md:col-span-1">
-          <div className="aspect-[2/3] bg-muted rounded-lg mb-4 flex items-center justify-center">
-            <span className="text-4xl">📚</span>
-          </div>
+          <BookCover book={book} size="lg" className="mb-4" />
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />

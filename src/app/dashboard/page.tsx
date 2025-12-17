@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Slider } from "@/components/ui/slider"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/components/ui/use-toast"
+import { BookCover } from "@/components/BookCover"
 import Link from "next/link"
 import { ReadingStatus } from "@/lib/types"
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
@@ -467,9 +468,7 @@ export default function DashboardPage() {
                         <Link key={book.id} href={`/book/${book.id}`}>
                           <Card className="hover:shadow-md transition-shadow cursor-pointer">
                             <CardHeader>
-                              <div className="aspect-[2/3] bg-muted rounded-lg mb-2 flex items-center justify-center">
-                                <span className="text-2xl">📚</span>
-                              </div>
+                              <BookCover book={book} size="sm" className="mb-2" />
                               <CardTitle className="text-sm line-clamp-2">{book.title}</CardTitle>
                               <CardDescription className="text-xs line-clamp-1">
                                 {authors.find(a => a.id === book.authorId)?.name || "Unknown"}
@@ -514,9 +513,7 @@ export default function DashboardPage() {
                         <Link key={book.id} href={`/book/${book.id}`}>
                           <Card className="hover:shadow-md transition-shadow cursor-pointer">
                             <CardHeader>
-                              <div className="aspect-[2/3] bg-muted rounded-lg mb-2 flex items-center justify-center">
-                                <span className="text-2xl">📚</span>
-                              </div>
+                              <BookCover book={book} size="sm" className="mb-2" />
                               <CardTitle className="text-sm line-clamp-2">{book.title}</CardTitle>
                               <CardDescription className="text-xs line-clamp-1">
                                 {authors.find(a => a.id === book.authorId)?.name || "Unknown"}
