@@ -44,6 +44,9 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             {currentUser ? (
               <>
+                <Link href="/dashboard">
+                  <Button variant="ghost">Dashboard</Button>
+                </Link>
                 <Link href="/discover">
                   <Button variant="ghost">Discover</Button>
                 </Link>
