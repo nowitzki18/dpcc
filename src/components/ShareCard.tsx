@@ -1,6 +1,5 @@
 "use client"
 
-import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Download, Share2 } from "lucide-react"
 import { useRef } from "react"
@@ -58,9 +57,9 @@ export function ShareCard({ children, title, className }: ShareCardProps) {
 
   return (
     <div className={className}>
-      <Card ref={cardRef} className="p-6 bg-white">
-        <CardContent className="p-0">{children}</CardContent>
-      </Card>
+      <div ref={cardRef} className="p-6 bg-white rounded-lg border shadow-sm">
+        {children}
+      </div>
       <div className="flex gap-2 mt-4">
         <Button onClick={handleDownload} variant="outline" size="sm">
           <Download className="h-4 w-4 mr-2" />
@@ -71,7 +70,7 @@ export function ShareCard({ children, title, className }: ShareCardProps) {
           Share
         </Button>
       </div>
-    </Card>
+    </div>
   )
 }
 
