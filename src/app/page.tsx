@@ -1,11 +1,27 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
+import { useStore } from "@/lib/store"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { BookOpen, Star, Users, TrendingUp, Shield, Target } from "lucide-react"
 
 export default function HomePage() {
+  const { currentUser } = useStore()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (currentUser) {
+      router.push("/dashboard")
+    }
+  }, [currentUser, router])
+
+  if (currentUser) {
+    return null // Will redirect to dashboard
+  }
+
   return (
     <div className="container mx-auto px-4 py-16">
       <section className="text-center mb-16">
