@@ -9,21 +9,15 @@ import { useMemo } from "react"
 export default function YearInReviewPage() {
   const { currentUser, readingLogs, reviews, books } = useStore()
 
-  if (!currentUser) {
-    return (
-      <div className="container mx-auto px-4 py-16 text-center">
-        <p>Please sign in to view your year in review</p>
-      </div>
-    )
-  }
-
   const year = new Date().getFullYear()
   const yearLogs = readingLogs.filter(log => {
+    if (!currentUser) return false
     const logYear = log.finishDate ? new Date(log.finishDate).getFullYear() : new Date().getFullYear()
     return log.userId === currentUser.id && logYear === year && log.status === 'read'
   })
 
   const yearReviews = reviews.filter(r => {
+    if (!currentUser) return false
     const reviewYear = new Date(r.createdAt).getFullYear()
     return r.userId === currentUser.id && reviewYear === year
   })
@@ -73,6 +67,14 @@ export default function YearInReviewPage() {
     }
   }, [yearLogs, yearReviews, books])
 
+  if (!currentUser) {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <p>Please sign in to view your year in review</p>
+      </div>
+    )
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
@@ -86,7 +88,7 @@ export default function YearInReviewPage() {
         <ShareCard title={`${currentUser.name}-${year}-reading-review`}>
           <div className="p-8 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold mb-2">{currentUser.name}'s {year} Reading Year</h2>
+              <h2 className="text-3xl font-bold mb-2">{currentUser.name}&apos;s {year} Reading Year</h2>
               <p className="text-muted-foreground">Powered by GreatReads</p>
             </div>
 

@@ -104,7 +104,7 @@ export default function ReviewPage() {
         <CardHeader>
           <CardTitle>Write a Review</CardTitle>
           <CardDescription>
-            Share your thoughts about "{book.title}"
+            Share your thoughts about &quot;{book.title}&quot;
           </CardDescription>
         </CardHeader>
         <CardContent>

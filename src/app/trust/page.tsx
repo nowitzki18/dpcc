@@ -158,7 +158,7 @@ export default function TrustPage() {
             <CardHeader>
               <CardTitle>Your Reports</CardTitle>
               <CardDescription>
-                Track reports you've submitted
+                Track reports you&apos;ve submitted
               </CardDescription>
             </CardHeader>
             <CardContent>

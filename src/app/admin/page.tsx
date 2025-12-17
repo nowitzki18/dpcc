@@ -12,14 +12,6 @@ import { useMemo } from "react"
 export default function AdminPage() {
   const { currentUser, books, reviews, users, reports, resetDemoData } = useStore()
 
-  if (!currentUser || currentUser.role !== 'admin') {
-    return (
-      <div className="container mx-auto px-4 py-16 text-center">
-        <p>Admin access required</p>
-      </div>
-    )
-  }
-
   const moderationQueue = reports.filter(r => r.status === 'pending')
   const shadowBannedReviews = reviews.filter(r => r.shadowBanned)
 
@@ -47,6 +39,14 @@ export default function AdminPage() {
   }, [reviews])
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
+
+  if (!currentUser || currentUser.role !== 'admin') {
+    return (
+      <div className="container mx-auto px-4 py-16 text-center">
+        <p>Admin access required</p>
+      </div>
+    )
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

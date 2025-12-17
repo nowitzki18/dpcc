@@ -70,7 +70,7 @@ export default function DiscoverPage() {
                 <CardTitle>Personalized Recommendations</CardTitle>
               </div>
               <CardDescription>
-                Books we think you'll love based on your preferences
+                Books we think you&apos;ll love based on your preferences
               </CardDescription>
             </CardHeader>
             <CardContent>
