@@ -76,18 +76,25 @@ export default function DashboardPage() {
   const readingData = useMemo(() => {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
     const currentYear = new Date().getFullYear()
+    const currentMonth = new Date().getMonth()
     const monthlyData = months.map(month => ({ month, books: 0, pages: 0 }))
 
-    userLogs
-      .filter(log => log.status === 'read' && log.finishDate)
-      .forEach(log => {
-        const date = new Date(log.finishDate!)
+    userLogs.forEach(log => {
+      // Only count completed books with finishDate for accuracy
+      if (log.status === 'read' && log.finishDate) {
+        const date = new Date(log.finishDate)
         if (date.getFullYear() === currentYear) {
           const monthIndex = date.getMonth()
           monthlyData[monthIndex].books += 1
-          monthlyData[monthIndex].pages += log.pagesRead
+          monthlyData[monthIndex].pages += log.pagesRead || 0
         }
-      })
+      }
+      // For currently reading books, show progress in current month
+      else if (log.status === 'reading' && log.pagesRead > 0) {
+        // Add pages to current month to show active reading
+        monthlyData[currentMonth].pages += log.pagesRead || 0
+      }
+    })
 
     return monthlyData
   }, [userLogs])
@@ -111,12 +118,23 @@ export default function DashboardPage() {
     const existingLog = userLogs.find(l => l.bookId === selectedBook)
 
     if (existingLog) {
-      updateReadingLog(existingLog.id, {
+      const updates: any = {
         status,
         progress: Math.min(100, progressPercent),
         pagesRead: pagesReadNum,
         pagesPerDay: existingLog.pagesPerDay, // Keep existing average
-      })
+      }
+      
+      // Set finishDate when marking as read
+      if (status === 'read' && !existingLog.finishDate) {
+        updates.finishDate = new Date().toISOString()
+      }
+      // Set startDate when marking as reading
+      if (status === 'reading' && !existingLog.startDate) {
+        updates.startDate = new Date().toISOString()
+      }
+      
+      updateReadingLog(existingLog.id, updates)
       toast({
         title: "Progress updated!",
         description: `Updated reading progress for ${book.title}`,
@@ -134,6 +152,7 @@ export default function DashboardPage() {
         highlights: [],
         annotations: [],
         startDate: status === 'reading' ? new Date().toISOString() : undefined,
+        finishDate: status === 'read' ? new Date().toISOString() : undefined,
       })
       toast({
         title: "Book added!",
@@ -319,7 +338,10 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={readingData}>
+              <BarChart 
+                key={JSON.stringify(readingData)} 
+                data={readingData}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
                 <YAxis yAxisId="left" />
