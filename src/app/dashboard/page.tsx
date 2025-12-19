@@ -75,23 +75,32 @@ export default function DashboardPage() {
 
   const readingData = useMemo(() => {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    const currentYear = new Date().getFullYear()
-    const currentMonth = new Date().getMonth()
+    const now = new Date()
+    const currentYear = now.getFullYear()
+    const currentMonth = now.getMonth()
     const monthlyData = months.map(month => ({ month, books: 0, pages: 0 }))
 
     userLogs.forEach(log => {
-      // Only count completed books with finishDate for accuracy
+      // Count completed books with finishDate
       if (log.status === 'read' && log.finishDate) {
         const date = new Date(log.finishDate)
-        if (date.getFullYear() === currentYear) {
+        // Include current year and previous year for better data visibility
+        if (date.getFullYear() === currentYear || date.getFullYear() === currentYear - 1) {
           const monthIndex = date.getMonth()
-          monthlyData[monthIndex].books += 1
-          monthlyData[monthIndex].pages += log.pagesRead || 0
+          if (monthIndex >= 0 && monthIndex < 12) {
+            monthlyData[monthIndex].books += 1
+            monthlyData[monthIndex].pages += log.pagesRead || 0
+          }
         }
       }
       // For currently reading books, show progress in current month
       else if (log.status === 'reading' && log.pagesRead > 0) {
         // Add pages to current month to show active reading
+        monthlyData[currentMonth].pages += log.pagesRead || 0
+      }
+      // Also count books marked as read even without finishDate (set it to today)
+      else if (log.status === 'read' && !log.finishDate && log.pagesRead > 0) {
+        monthlyData[currentMonth].books += 1
         monthlyData[currentMonth].pages += log.pagesRead || 0
       }
     })
@@ -339,16 +348,21 @@ export default function DashboardPage() {
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart 
-                key={JSON.stringify(readingData)} 
                 data={readingData}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="month" />
-                <YAxis yAxisId="left" />
-                <YAxis yAxisId="right" orientation="right" />
-                <Tooltip />
-                <Bar yAxisId="left" dataKey="books" fill="#8884d8" name="Books" />
-                <Bar yAxisId="right" dataKey="pages" fill="#82ca9d" name="Pages" />
+                <YAxis />
+                <Tooltip 
+                  formatter={(value: any, name: string) => {
+                    if (name === 'books') return [value, 'Books']
+                    if (name === 'pages') return [value.toLocaleString(), 'Pages']
+                    return [value, name]
+                  }}
+                />
+                <Bar dataKey="books" fill="#8884d8" name="Books" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="pages" fill="#82ca9d" name="Pages" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
